@@ -13,15 +13,15 @@ Creates `.bat` launcher scripts so that typing a CLI app name in the Windows Fil
 Typing a CLI name (like `claude`) in Explorer's address bar usually fails or gives a bad experience:
 - `.cmd` files are found in PATH but open in a bare cmd window that flashes away
 - Direct `.exe` CLI tools (TUI apps) may not work properly without a terminal host
-- The user currently has to type `powershell`, wait, then type the CLI name — two steps
+- The user currently has to type `powershell`, wait, then type the CLI name --- two steps
 
 The fix: a `.bat` file in a PATH directory that uses `start powershell -NoExit -Command "appname.cmd %*"`. Explorer finds the `.bat` (higher priority than `.cmd` in PATHEXT), launches PowerShell properly, and forwards any arguments.
 
-## Workflow — Part A: Address Bar Launcher
+## Workflow --- Part A: Address Bar Launcher
 
 ### Step A1: Identify the CLI app
 
-Ask the user which CLI app(s) they want to launch. The name should be the command they'd type in PowerShell — e.g., `claude`, `opencode`, `node`, `npm`.
+Ask the user which CLI app(s) they want to launch. The name should be the command they'd type in PowerShell --- e.g., `claude`, `opencode`, `node`, `npm`.
 
 ### Step A2: Find the best PATH directory
 
@@ -33,8 +33,8 @@ $env:PATH -split ';' | Select-Object -First 20
 
 Then pick the best directory, in order of preference:
 
-1. `%USERPROFILE%\.local\bin` — if it exists and is in PATH (usually first entry), this is ideal
-2. `%APPDATA%\npm` — where npm global packages live, already in PATH
+1. `%USERPROFILE%\.local\bin` --- if it exists and is in PATH (usually first entry), this is ideal
+2. `%APPDATA%\npm` --- where npm global packages live, already in PATH
 3. Any other user-writable directory early in the PATH
 
 Check if the chosen directory exists. If it doesn't, create it and warn the user they may need to re-login for PATH changes to take effect if the directory wasn't already in PATH.
@@ -48,7 +48,7 @@ Test-Path -LiteralPath "$env:USERPROFILE\.local\bin\APPNAME.bat"
 Test-Path -LiteralPath "$env:USERPROFILE\.local\bin\APPNAME.cmd"
 ```
 
-If a `.bat` already exists, ask the user if they want to overwrite it. If only a `.cmd` exists, that's fine — `.bat` takes precedence in PATHEXT and will be found first by Explorer.
+If a `.bat` already exists, ask the user if they want to overwrite it. If only a `.cmd` exists, that's fine --- `.bat` takes precedence in PATHEXT and will be found first by Explorer.
 
 ### Step A4: Create the .bat file
 
@@ -75,12 +75,12 @@ Tell the user to test by typing the app name in File Explorer's address bar and 
 
 ---
 
-## Workflow — Part B: Right-Click Context Menu
+## Workflow --- Part B: Right-Click Context Menu
 
 Adds right-click context menu entries so that the CLI app can be launched from any folder, with that folder as the working directory. Supports two entry types:
 
-- **Folder context menu** (right-click on a folder) — uses that folder as workspace
-- **Folder background menu** (right-click empty space in a folder) — uses the current folder as workspace
+- **Folder context menu** (right-click on a folder) --- uses that folder as workspace
+- **Folder background menu** (right-click empty space in a folder) --- uses the current folder as workspace
 
 ### Step B1: Decide which menu entries to create
 
@@ -97,12 +97,12 @@ Both can be created at the same time. If the user doesn't specify, default to bo
 
 For each context menu location, create a registry key under `HKCU:\Software\Classes\<path>\shell\<SubKey>` with these values:
 
-- **(Default)** — The display text in the context menu, e.g. `"Open with OpenCode"`
-- **Icon** (optional) — Path to an icon file, or the CLI executable path to use its built-in icon
-- **Extended** (optional) — If set to empty string, the menu item only appears when holding Shift
+- **(Default)** --- The display text in the context menu, e.g. `"Open with OpenCode"`
+- **Icon** (optional) --- Path to an icon file, or the CLI executable path to use its built-in icon
+- **Extended** (optional) --- If set to empty string, the menu item only appears when holding Shift
 
 Under the `<SubKey>` key, create a `command` subkey with:
-- **(Default)** — The command to execute
+- **(Default)** --- The command to execute
 
 The command template:
 
@@ -136,7 +136,7 @@ Set-ItemProperty -Path "$bgRegPath\command" -Name "(Default)" -Value "powershell
 
 ### Step B3: Verify context menu
 
-Ask the user to right-click a folder (or empty space in a folder) in File Explorer. The new menu entry should appear. Changes take effect immediately — no restart needed.
+Ask the user to right-click a folder (or empty space in a folder) in File Explorer. The new menu entry should appear. Changes take effect immediately --- no restart needed.
 
 ### Step B4: Remove context menu entries
 
@@ -149,4 +149,4 @@ Remove-Item -LiteralPath "HKCU:\Software\Classes\Directory\Background\shell\open
 
 ## Multiple apps
 
-If the user wants to set up multiple CLI apps, create a `.bat` for each one in the same PATH directory. Process them in parallel — each is independent. Context menu entries can also be added for each app independently.
+If the user wants to set up multiple CLI apps, create a `.bat` for each one in the same PATH directory. Process them in parallel --- each is independent. Context menu entries can also be added for each app independently.
