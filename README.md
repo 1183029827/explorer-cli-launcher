@@ -22,18 +22,21 @@
 
 ## 安装
 
-把 `explorer-cli-launcher/` 目录放到 agent 的技能目录下：
+### 方式一：Skills CLI（推荐）
 
-```
-~/.agents/skills/explorer-cli-launcher/
-  └── SKILL.md
+```bash
+npx skills add 1183029827/explorer-cli-launcher -g -y
 ```
 
-或克隆：
+### 方式二：手动克隆
 
 ```bash
 git clone https://github.com/1183029827/explorer-cli-launcher.git ~/.agents/skills/explorer-cli-launcher
 ```
+
+### 方式三：下载 .skill 包
+
+从 [Releases](https://github.com/1183029827/explorer-cli-launcher/releases) 下载 `.skill` 文件，导入你的 agent。
 
 无需依赖，无需配置，即装即用。
 
@@ -102,10 +105,14 @@ An agent skill that configures CLI apps so you can:
 
 ### Install
 
-Drop the folder into your agent's skills directory:
-
 ```bash
+# Recommended: via Skills CLI
+npx skills add 1183029827/explorer-cli-launcher -g -y
+
+# Or clone manually
 git clone https://github.com/1183029827/explorer-cli-launcher.git ~/.agents/skills/explorer-cli-launcher
+
+# Or download .skill from Releases
 ```
 
 ### Trigger phrases
